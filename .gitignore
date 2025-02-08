@@ -32,3 +32,4 @@ coverage
 
 # Config
 config.json
+.env

@@ -51,7 +51,7 @@ const routeToSignUp = () => {
 </script>
 <template>
   <div class="login-container">
-    <h1>Flowcast</h1>
+    <h1 class="flowcast-title">Flowcast</h1>
     <div class = "account-input">
       <h2>Log In to an Account</h2>
       <div class="login-input-block">

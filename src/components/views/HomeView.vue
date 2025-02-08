@@ -12,7 +12,8 @@ const routeToSignup = () => {
 </script>
 <template>
   <div class="home-container">
-    <h1>Flowcast</h1>
+    <h1 class="flowcast-title">Flowcast</h1>
+    <p class="subtitle">Sync Your Habits to Your Cycle!</p>
     <div class="home-options">
       <p><button @click="routeToLogin">Log In</button></p>
       <p><button @click="routeToSignup">Sign Up</button></p>
