@@ -11,17 +11,17 @@ const db = getFirestore(firebaseApp)
 
 const startDate = ref("startDate")
 const endDate = ref("startDate")
+const auth = getAuth();
 
 const submitPeriodBtn = () => {
-  const auth = getAuth();
   const data = {
     startDate: startDate.value,
     endDate: endDate.value
   }
   console.log(data);
-  addPeriod(auth, data)
+  addPeriod(data)
 }
-const addPeriod = async (auth, data) => {
+const addPeriod = async (data) => {
   try{
     console.log("Data: ", data);
     const userPeriods = collection(db, "users", auth.currentUser.uid, "periods");
@@ -31,6 +31,9 @@ const addPeriod = async (auth, data) => {
     console.error("errorrrrr: ", e)
   }
 }
+
+const periods = useCollection(collection(db, "users", auth.currentUser.uid, "periods"))
+
 
 </script>
 <template>
@@ -45,5 +48,10 @@ const addPeriod = async (auth, data) => {
     </div>
 
     <h2>Past Periods</h2>
+    <ul>
+      <li v-for="period in periods" :key="period.id">
+        {{ period.startDate }} - {{ period.endDate }}
+      </li>
+    </ul>
   </div>
 </template>
