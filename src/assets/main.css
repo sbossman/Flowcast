@@ -127,7 +127,8 @@ nav .account:hover{
 
 .account-input .submit button{
   padding: 10px;
-  background-color: #DAD5FA;
+  background-color: #673C4F;
+  color: white;
   border: 0 solid black;
   border-radius: 20px;
   font-size: 16px;
@@ -136,14 +137,14 @@ nav .account:hover{
 }
 
 .account-input .submit button:hover{
-  background-color: #cfc8f9;
+  background-color: #8d536d;
 }
 
 .diff-sign-in{
  color: #545F66;
 }
 .diff-sign-in a{
-  color: #673C4F;
+  color: #3399FF;
   text-decoration: underline;
 }
 
