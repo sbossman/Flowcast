@@ -1,13 +1,3 @@
-<template>
-  <div class="login-container">
-    <h1>Log In to an Account</h1>
-    <p><input type="text" placeholder="Email" v-model="email" /></p>
-    <p><input type="password" placeholder="Password" v-model="password" /></p>
-    <p v-if="errMsg">{{ errMsg }}</p>
-    <p><button @click="register">Submit</button></p>
-    <p><button @click="signInWithGoogle">Sign In With Google</button></p>
-  </div>
-</template>
 <script setup>
 import { ref } from "vue"
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth"
@@ -39,7 +29,7 @@ const register = () => {
             errMsg.value = "Email or password was incorrect";
             break;
         }
-        alert(error.message);
+        // alert(error.message);
       })
 }
 
@@ -54,4 +44,30 @@ const signInWithGoogle = () => {
         // handle error
       })
 }
+
+const routeToSignUp = () => {
+  router.push("/signup");
+}
 </script>
+<template>
+  <div class="login-container">
+    <h1 class="flowcast-title">Flowcast</h1>
+    <div class = "account-input">
+      <h2>Log In to an Account</h2>
+      <div class="login-input-block">
+        <p>Email</p>
+        <input class="login" type="text" v-model="email" />
+      </div>
+      <div class="login-input-block">
+        <p>Password</p>
+        <input class="login" type="password" v-model="password" />
+      </div>
+      <p v-if="errMsg">{{ errMsg }}</p>
+      <div class ="submit">
+        <p><button @click="register">Log In</button></p>
+        <p><button @click="signInWithGoogle">Use Google</button></p>
+      </div>
+    </div>
+    <p class="diff-sign-in">Don't have an account? <a @click="routeToSignUp">Sign Up</a></p>
+  </div>
+</template>

@@ -1,5 +1,221 @@
 @import './base.css';
 
+body{
+  overflow-block: hidden;
+}
+
+nav{
+  background-color: white;
+  overflow: hidden;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 10px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  justify-content: center;
+}
+
+nav .nav-link{
+  float: left;
+  color: black;
+  text-align: center;
+  padding-right: 20px;
+  padding-left: 20px;
+  text-decoration: none;
+  height: 50px;
+  font-size: 17px;
+  align-content: center;
+  margin: 0;
+}
+
+nav .nav-link:hover{
+  background-color: #dddddd;
+}
+
+nav .nav-link.active {
+  background-color: aqua;
+  color: white;
+}
+
+nav .account{
+  right: 0;
+  background-color: rgba(0, 0, 0, 0);
+  float: right;
+  height: 50px;
+  top: -10px;
+  display: block;
+  color: black;
+  text-align: center;
+  padding-right: 20px;
+  padding-left: 20px;
+  text-decoration: none;
+  font-size: 17px;
+  align-content: center;
+  margin: 0;
+  border: 0 solid;
+}
+
+nav .account:hover{
+  background-color: #dddddd;
+}
+
+.flowcast-title{
+  color: black;
+  text-align: center;
+  font-size: 64px;
+  font-weight: bold;
+}
+
+.login-container{
+  background-color: #ffb4b8;
+  position: absolute;
+  left: 0px;
+  top: 50px;
+  height: 90%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.account-input{
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.account-input h2{
+  color: black;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.account-input .login-input-block{
+  margin: 7px;
+}
+
+.account-input p{
+  text-align: center;
+  color: black;
+}
+.account-input .login{
+  width: 200px;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  position: relative;
+  border-radius: 5px;
+  font-size: 16px;
+  border: 1px solid grey;
+}
+
+.account-input .submit{
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.account-input .submit button{
+  padding: 10px;
+  background-color: #673C4F;
+  color: white;
+  border: 0 solid black;
+  border-radius: 20px;
+  font-size: 16px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.account-input .submit button:hover{
+  background-color: #8d536d;
+}
+
+.diff-sign-in{
+ color: #545F66;
+}
+.diff-sign-in a{
+  color: #3399FF;
+  text-decoration: underline;
+}
+
+.diff-sign-in a:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.home-container{
+  background-color: #ffb4b8;
+  position: absolute;
+  left: 0px;
+  top: 50px;
+  height: 90%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.home-options{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.home-options button{
+  padding: 10px;
+  background-color: #673C4F ;
+  color: white;
+  border: 0 solid black;
+  border-radius: 50px;
+  font-size: 22px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.home-options  button:hover{
+  background-color: #8d536d;
+  cursor: pointer;
+}
+
+.subtitle{
+  color: #545F66;
+  font-size: 20px;
+  font-style: oblique;
+  margin-bottom: 20px;
+}
+
+.user-home-container{
+  background-color: black;
+  position: absolute;
+  left: 0px;
+  top: 50px;
+  height: 90%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-home-container h2{
+  color: #ffb4b8;
+}
+
+
 #app {
   max-width: 1280px;
   margin: 0 auto;
@@ -15,15 +231,11 @@ a,
   padding: 3px;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
 
 @media (min-width: 1024px) {
   body {
     display: flex;
+    overflow: hidden;
     place-items: center;
   }
 

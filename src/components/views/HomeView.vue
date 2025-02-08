@@ -1,13 +1,23 @@
 <script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const routeToLogin = () => {
+  router.push("/login")
+}
+const routeToSignup = () => {
+  router.push("/signup")
+}
 </script>
 <template>
-  <div class="login-container">
-    <h2>YEEEEEEEEEEEEEE</h2>
+  <div class="home-container">
+    <h1 class="flowcast-title">Flowcast</h1>
+    <p class="subtitle">Sync Your Habits to Your Cycle!</p>
+    <div class="home-options">
+      <p><button @click="routeToLogin">Log In</button></p>
+      <p><button @click="routeToSignup">Sign Up</button></p>
+    </div>
+
   </div>
 </template>
-<script>
-export default {
-  name: 'HomeView',
-
-};
-</script>
