@@ -1,6 +1,4 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
 import { useFirestore } from 'vuefire'
 import { useRouter } from 'vue-router'
 import { onMounted, ref } from "vue";
