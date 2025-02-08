@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="tracker-container">
     <h1>Flowcast</h1>
     <!-- Log Period Button/Pop-up-->
     <button @click="showPeriodInput = true">Log Period</button>
-    
+
     <!-- Only pops up if button is pressed :D-->
     <div v-if="showPeriodInput" class="modal">
       <div class="modal-content">
@@ -33,6 +33,7 @@ import { ref } from 'vue';
 import { db } from '../firebase';
 import { collection, addDoc } from "firebase/firestore";
 import { calculatePhase } from './PhaseCalculator';
+import {onMounted} from "vue";
 
 const showPeriodInput = ref(false);
 const periodDuration = ref(0);

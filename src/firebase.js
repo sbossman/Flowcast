@@ -22,7 +22,7 @@ export const auth = getAuth(firebaseApp)
 const analytics = getAnalytics(firebaseApp);
 
 // used for the firestore refs
-const db = getFirestore(firebaseApp)
+export const db = getFirestore(firebaseApp)
 
 // here we can export reusable database references
 export const todosRef = collection(db, 'todos')

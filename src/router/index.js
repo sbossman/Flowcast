@@ -20,6 +20,13 @@ const router = createRouter({
                 requiresAuth: true,
             },
         },
+        {
+            path: "/tracker",
+            component: () => import("../components/MainTracker.vue"),
+            meta: {
+                requiresAuth: true,
+            },
+        }
     ]
 });
 
