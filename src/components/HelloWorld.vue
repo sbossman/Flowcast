@@ -1,20 +1,33 @@
 <script setup>
+import { useCollection } from 'vuefire'
+import { doc, getFirestore, collection } from "firebase/firestore";
+import { useFirestore } from 'vuefire'
+import { firebaseApp } from "@/firebase.js";
+
+// const db = useFirestore()
+const db = getFirestore(firebaseApp)
+const todos = useCollection(collection(db, "todos"))
+
+console.log(todos);
+
 defineProps({
   msg: {
     type: String,
     required: true,
   },
 })
+
+
 </script>
 
 <template>
   <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a href="https://vite.dev/" target="_blank" rel="noopener">Vite</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
-    </h3>
+    <ul>
+      <li v-for="todo in todos" :key="todo.id" >
+        <span>TASK: {{ todo.title }}</span>
+      </li>
+    </ul>
+
   </div>
 </template>
 

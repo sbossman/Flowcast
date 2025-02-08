@@ -1,20 +1,44 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
+import { useFirestore } from 'vuefire'
+import { useRouter } from 'vue-router'
+import { onMounted, ref } from "vue";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
+
+const db = useFirestore()
+const router = useRouter()
+
+const isLoggedIn = ref(false);
+
+let auth;
+onMounted(() => {
+  auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if(user){
+      isLoggedIn.value = true;
+    } else{
+      isLoggedIn.value = false;
+    }
+  })
+})
+
+const handleSignOut = () => {
+  signOut(auth).then(() => {
+    router.push("/");
+  })
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <nav>
+    <router-link to="/">Home</router-link>
+    <router-link to="/feed">Feed</router-link>
+    <router-link to="/login">Log In</router-link>
+    <router-link to="/signup">Sign Up</router-link>
+    <button @click="handleSignOut" >Sign Out</button>
+  </nav>
+  <router-view />
 </template>
 
 <style scoped>
