@@ -14,15 +14,15 @@ const router = createRouter({
             path: "/signup",
             component: () => import("../components/views/SignUpView.vue") },
         {
-            path: "/feed",
-            component: () => import("../components/views/FeedView.vue"),
+            path: "/tracker",
+            component: () => import("../components/views/MainTrackerView.vue"),
             meta: {
                 requiresAuth: true,
             },
         },
         {
-            path: "/tracker",
-            component: () => import("../components/MainTracker.vue"),
+            path: "/pasttracker",
+            component: () => import("../components/views/PastTrackerView.vue"),
             meta: {
                 requiresAuth: true,
             },
