@@ -1,9 +1,12 @@
 import { db } from '../firebase';
 import { collection, addDoc, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth"
+
+const auth = getAuth();
 
 export const calculateAvgCycle = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'periods'));
+      const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
       const startDates = querySnapshot.docs
         .map((doc) => new Date(doc.data().startDate))
         .sort((a, b) => a - b);
