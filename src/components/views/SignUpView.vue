@@ -6,16 +6,33 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth"
+import { doc, getFirestore, collection, addDoc } from "firebase/firestore";
+import {firebaseApp} from "@/firebase.js";
 import { useRouter } from 'vue-router'
 const email = ref("email");
 const password = ref("password");
 const router = useRouter()
+
+const addUserToDB = async (userId) => {
+  try{
+    const db = getFirestore(firebaseApp)
+    const docRef = await addDoc(collection(db, "users"), {
+      uid: userId,
+      periods: []
+    });
+    console.log("Doc written with Id: ", docRef.id);
+  } catch(e) {
+    console.error("error adding document: ", e);
+  }
+}
 const register = () => {
   const auth = getAuth();
   createUserWithEmailAndPassword(auth, email.value, password.value)
       .then((data) => {
         console.log("Successfully registered!");
         router.push("/feed");
+        console.log("UID: ", auth.currentUser.uid)
+        addUserToDB(auth.currentUser.uid);
       })
       .catch((error) => {
         console.log(error.code);

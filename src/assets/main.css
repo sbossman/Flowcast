@@ -14,8 +14,8 @@ nav{
   left: 0;
   top: 0;
   justify-content: center;
-  align-items: center;
 }
+
 nav .nav-link{
   float: left;
   color: black;
@@ -26,7 +26,6 @@ nav .nav-link{
   height: 50px;
   font-size: 17px;
   align-content: center;
-  top: -10px;
   margin: 0;
 }
 
@@ -38,6 +37,29 @@ nav .nav-link.active {
   background-color: aqua;
   color: white;
 }
+
+nav .account{
+  right: 0;
+  background-color: rgba(0, 0, 0, 0);
+  float: right;
+  height: 50px;
+  top: -10px;
+  display: block;
+  color: black;
+  text-align: center;
+  padding-right: 20px;
+  padding-left: 20px;
+  text-decoration: none;
+  font-size: 17px;
+  align-content: center;
+  margin: 0;
+  border: 0 solid;
+}
+
+nav .account:hover{
+  background-color: #AFDDFE;
+}
+
 
 .login-container{
   background-color: #ffb4b8;
@@ -129,6 +151,68 @@ nav .nav-link.active {
   color: #673C4F;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.home-container{
+  background-color: #ffb4b8;
+  position: absolute;
+  left: 0px;
+  top: 50px;
+  height: 90%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-container h1{
+  position: relative;
+  color: black;
+  text-align: center;
+  font-size: 64px;
+  font-weight: bold;
+}
+
+.home-options{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.home-options button{
+  padding: 10px;
+  background-color: #673C4F ;
+  color: white;
+  border: 0 solid black;
+  border-radius: 50px;
+  font-size: 22px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.home-options  button:hover{
+  background-color: #7F557D;
+  cursor: pointer;
+}
+
+.user-home-container{
+  background-color: black;
+  position: absolute;
+  left: 0px;
+  top: 50px;
+  height: 90%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-home-container h2{
+  color: #ffb4b8;
 }
 
 #app {
