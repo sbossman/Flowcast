@@ -177,6 +177,9 @@ const periodOnDay = (day) => {
 
 const getPeriodPrediction = async () => {
     try {
+      periods.value.sort((a, b) => {
+        a.valueOf().data.startDate - b.valueOf().data.startDate
+      })
       const mostRecent = periods.value.at(-1).valueOf().data.startDate;
 
       console.log("R: " + mostRecent)
