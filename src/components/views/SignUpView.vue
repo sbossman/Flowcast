@@ -30,7 +30,7 @@ const register = () => {
   createUserWithEmailAndPassword(auth, email.value, password.value)
       .then((data) => {
         console.log("Successfully registered!");
-        router.push("/feed");
+        router.push("/home");
         console.log("UID: ", auth.currentUser.uid)
         addUserToDB(auth.currentUser.uid);
       })
@@ -45,7 +45,7 @@ const signInWithGoogle = () => {
   signInWithPopup(getAuth(), provider)
       .then((result) => {
         console.log(result.user);
-        router.push("/feed");
+        router.push("/home");
       })
       .catch((error) => {
         // handle error

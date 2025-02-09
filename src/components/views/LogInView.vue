@@ -11,7 +11,7 @@ const register = () => {
   signInWithEmailAndPassword(auth, email.value, password.value)
       .then((data) => {
         console.log("Successfully registered!");
-        router.push("/feed");
+        router.push("/home");
       })
       .catch((error) => {
         console.log(error.code);
@@ -38,7 +38,7 @@ const signInWithGoogle = () => {
   signInWithPopup(getAuth(), provider)
       .then((result) => {
         console.log(result.user);
-        router.push("/feed");
+        router.push("/home");
       })
       .catch((error) => {
         // handle error
@@ -48,6 +48,7 @@ const signInWithGoogle = () => {
 const routeToSignUp = () => {
   router.push("/signup");
 }
+
 </script>
 <template>
   <div class="login-container">
