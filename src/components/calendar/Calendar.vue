@@ -1,10 +1,11 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import {getCurrentInstance, onMounted, reactive, ref} from "vue";
 import { useCollection } from "vuefire";
 import {doc, getFirestore, collection, updateDoc, getDocs, deleteDoc, addDoc} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import {db, firebaseApp} from "@/firebase.js";
 import {calculatePhase} from "@/components/PhaseCalculator.js";
+import {calculateAvgCycle} from "@/components/cycleCalculator.js";
 
 const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const today = new Date();
@@ -93,6 +94,20 @@ const getDaysArray = (y, m) => {
   return weeksArr;
 }
 
+const state = reactive({
+  currentDate: new Date(),
+  predictedPeriodStart: new Date('2025-02-10'), // Example start date
+  predictedPeriodEnd: new Date('2025-02-15') // Example end date
+});
+const updatePrediction = () => {
+  // Update the predicted period
+  getPeriodPrediction();
+
+  // Use $forceUpdate to force a re-render
+  const instance = getCurrentInstance();
+  instance?.proxy.$forceUpdate();  // Force a re-render to reflect the updated data
+};
+
 const month = ref(currentMonth);
 const monthNum = ref(currMonNum);
 const year = ref(currentYear);
@@ -112,11 +127,13 @@ const toPrevMon = () => {
     monthNum.value--;
   }
   month.value = months[monthNum.value]
+  updatePrediction()
 }
 
 const toThisMon = () => {
   month.value = currentMonth;
-  year.value = currentYear
+  year.value = currentYear;
+  updatePrediction()
 }
 
 const toNextMon = () => {
@@ -127,6 +144,7 @@ const toNextMon = () => {
     monthNum.value++;
   }
   month.value = months[monthNum.value]
+  updatePrediction()
 }
 
 const periods = ref([])
@@ -157,6 +175,56 @@ const periodOnDay = (day) => {
   });
 }
 
+const getPeriodPrediction = async () => {
+    try {
+      const mostRecent = periods.value.at(-1).valueOf().data.startDate;
+
+      console.log("R: " + mostRecent)
+      const avgCycle = await calculateAvgCycle();
+      if (typeof avgCycle !== 'number' || isNaN(avgCycle)) {
+        console.error('invalid avg:', avgCycle);
+        return false;
+      }
+
+      let totalDuration = 0;
+      let totalPeriods = 0;
+      for(let i = 0; i < periods.value.length; i++){
+        let s = new Date(periods.value.at(i).valueOf().data.startDate);
+        let e = new Date(periods.value.at(i).valueOf().data.endDate);
+        const diffInTime = e - s;
+        const diffInDays = diffInTime / (24*60*60*1000);
+        totalDuration = totalDuration + diffInDays;
+        totalPeriods++;
+      }
+      let avgDuration;
+      if(totalPeriods > 0){
+        avgDuration = Math.floor(totalDuration/totalPeriods);
+      }
+      else{
+        avgDuration = 0;
+      }
+      //mostRecent as a date
+      const mostRecentDate = new Date(mostRecent);
+      if (isNaN(mostRecentDate.getTime())) {
+        console.error('invalid recent date:', mostRecent);
+        return false;
+      }
+      const predictedStartDate = new Date(mostRecentDate);
+      const predictedEndDate = new Date(mostRecentDate);
+      predictedStartDate.setDate(mostRecentDate.getDate() + avgCycle);
+      predictedEndDate.setDate(mostRecentDate.getDate() + avgCycle + avgDuration);
+
+      predictedPeriodStart.value = predictedStartDate.toISOString().split('T')[0];
+      predictedPeriodEnd.value = predictedEndDate.toISOString().split('T')[0];
+    } catch (error) {
+      console.error('error w predicting period:', error);
+    }
+}
+
+const periodPredictedOnDay = (day) => {
+  return formatDate(day) >= predictedPeriodStart.value && formatDate(day) <= predictedPeriodEnd.value
+}
+
 const selectedDay = ref(null)
 const selectedPeriod = ref(null)
 const startDate = ref(null)
@@ -164,6 +232,8 @@ const endDate = ref(null)
 const periodId = ref(null)
 const showAddPeriod = ref(null)
 
+const predictedPeriodStart = ref(null)
+const predictedPeriodEnd = ref(null)
 const selectDay = (day) => {
   selectedDay.value = day;
   let periods = periodOnDay(day);
@@ -246,6 +316,7 @@ const deletePeriod = async (docId) => {
 
 onMounted(() => {
   fetchPeriods();
+  getPeriodPrediction();
 });
 
 const showModifyPeriod = ref(false);
@@ -267,12 +338,13 @@ const showModifyPeriod = ref(false);
       <div class="calendar-days">
         <div v-for="week in getDaysArray(year, monthNum)" class="week-row">
           <div v-for="day in week"
+               :key="day"
                class="day-box"
-               :class="{'diff-mon': !day.sameMon, 'period': periodOnDay(day.date).length > 0}"
+               :class="{'diff-mon': !day.sameMon, 'period': periodOnDay(day.date).length > 0, 'predicted-period': periodPredictedOnDay(day.date) == true}"
                @click="selectDay(day.date)"
           >
             <p>{{ day.day }}</p>
-<!--            <p>{{ periodOnDay(day.date)}}</p>-->
+            <p class="predicted-day" v-if="periodPredictedOnDay(day.date)">Period Predicted!</p>
           </div>
         </div>
       </div>
@@ -379,6 +451,9 @@ const showModifyPeriod = ref(false);
 .day-box.period{
   background-color: #F1555A;
 }
+.day-box.predicted-period{
+  background-color: #FBDADC;
+}
 .nav-buttons{
   margin: 10px;
   display: flex;
@@ -411,6 +486,15 @@ const showModifyPeriod = ref(false);
 .pn-btn:hover{
   background-color: #8d536d;
   cursor: pointer;
+}
+
+.predicted-day{
+  text-align: center;
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+
 }
 
 </style>
