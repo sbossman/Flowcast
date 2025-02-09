@@ -347,7 +347,6 @@ const showModifyPeriod = ref(false);
                @click="selectDay(day.date)"
           >
             <p>{{ day.day }}</p>
-            <p class="predicted-day" v-if="periodPredictedOnDay(day.date)">Period Predicted!</p>
           </div>
         </div>
       </div>
