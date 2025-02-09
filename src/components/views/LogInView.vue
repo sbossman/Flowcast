@@ -53,7 +53,7 @@ const routeToSignUp = () => {
   <div class="login-container">
     <h1 class="flowcast-title">Flowcast</h1>
     <div class = "account-input">
-      <h2>Log In to an Account</h2>
+      <h2>Log In to your Account</h2>
       <div class="login-input-block">
         <p>Email</p>
         <input class="login" type="text" v-model="email" />
