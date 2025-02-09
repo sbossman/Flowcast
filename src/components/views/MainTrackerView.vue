@@ -140,7 +140,7 @@ onMounted(async () => {
           <h2 class="phase-msg">Your next period will be <span id="phase"> {{ dateToString(nextPeriod) }}</span></h2>
          </div>
          <div v-else>
-          <h2 class="phase-msg">Ripski bro</h2>
+          <h2 class="phase-msg">Loading</h2>
          </div>
       </div>
       <!-- Log Period Button/Pop-up-->
