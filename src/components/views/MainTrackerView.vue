@@ -102,9 +102,6 @@ onMounted(async () => {
 <template>
   <div class="user-home-container">
     <h1 class="flowcast-title">Period Tracker</h1>
-    <!-- Log Period Button/Pop-up-->
-    <button class="log-period" @click="showPeriodInput = true">Log Period</button>
-
     <!-- only pops up if button is pressed :D-->
     <div v-if="showPeriodInput" class="modal">
       <div class="modal-content">
@@ -126,21 +123,29 @@ onMounted(async () => {
       </div>
     </div>
 
-    <!-- current phase -->
-    <div v-if="currPhase !== null">
-      <h2 class="phase-msg">Currently in your <span id="phase"> {{ currPhase }} </span></h2>
-    </div>
-    <div v-else>
-      <h2 class="phase-msg">Let's Get Started</h2>
+
+    <div class="inner-home-div">
+      <button class="log-period" @click="showPeriodInput = true">Log Period</button>
+      <div class="analysis-div">
+        <!-- current phase -->
+        <div v-if="currPhase !== null">
+          <h2 class="phase-msg">Currently in your <span id="phase"> {{ currPhase }} </span></h2>
+        </div>
+        <div v-else>
+          <h2 class="phase-msg">Let's Get Started</h2>
+        </div>
+
+        <!-- next period -->
+         <div v-if="nextPeriod !== null">
+          <h2 class="phase-msg">Your next period will be <span id="phase"> {{ dateToString(nextPeriod) }}</span></h2>
+         </div>
+         <div v-else>
+          <h2 class="phase-msg">Ripski bro</h2>
+         </div>
+      </div>
+      <!-- Log Period Button/Pop-up-->
     </div>
 
-    <!-- next period -->
-     <div v-if="nextPeriod !== null">
-      <h2 class="phase-msg">Your next period will be <span id="phase"> {{ dateToString(nextPeriod) }}</span></h2>
-     </div>
-     <div v-else>
-      <h2 class="phase-msg">Ripski bro</h2>
-     </div>
 
   </div>
 </template>

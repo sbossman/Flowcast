@@ -7,6 +7,7 @@ body{
 
 nav{
   background-color: white;
+  padding: 0;
   overflow: hidden;
   width: 100%;
   height: 50px;
@@ -14,8 +15,30 @@ nav{
   position: fixed;
   left: 0;
   top: 0;
-  justify-content: center;
+  justify-content: space-between;
+  display: flex;
 }
+
+nav .header{
+  justify-self: center;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  height: 50px;
+  top: 0px;
+  background-color: white;
+  font-family: 'Montserrat Alternates', serif;
+  font-size: 28px;
+  font-weight: bold;
+  color: black;
+}
+
+nav .header:hover{
+  cursor: pointer;
+}
+
 
 nav .nav-link{
   float: left;
@@ -35,10 +58,20 @@ nav .nav-link:hover{
   background-color: #dddddd;
 }
 
-nav .nav-link.active {
-  background-color: aqua;
+nav .router-link-active {
+  background-color: #F1555A;
   color: white;
 }
+nav .router-link-active:hover {
+  background-color: #EE2F36;
+  color: white;
+}
+
+nav .router-link-active.header{
+  background-color: white;
+  color: black;
+}
+
 
 nav .account{
   right: 0;
@@ -149,7 +182,7 @@ nav .account:hover{
  color: #545F66;
 }
 .diff-sign-in a{
-  color: #3399FF;
+  color: #067BC2;
   text-decoration: underline;
 }
 
@@ -216,19 +249,33 @@ nav .account:hover{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
 }
 
+.inner-home-div{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+.analysis-div{
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid #673C4F;
+  padding-left: 25px;
+}
 
-.log-period{
+button.log-period{
   padding: 10px;
+  display: inline-block;
   background-color: #673C4F ;
   color: white;
   border: 0 solid black;
   border-radius: 50px;
   font-size: 22px;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-right: 25px;
   font-family:'Montserrat Alternates', sans-serif;
 }
 
