@@ -115,9 +115,9 @@ const toNextMon = () => {
         </div>
       </div>
       <div class="nav-buttons">
-        <button class="pn-btn" @click="toPrevMon">Previous</button>
+        <button class="pn-btn" @click="toPrevMon"><<</button>
         <button class="today-btn" @click="toThisMon">Today</button>
-        <button class="pn-btn" @click="toNextMon">Next</button>
+        <button class="pn-btn" @click="toNextMon">>></button>
       </div>
 
     </div>
@@ -125,24 +125,32 @@ const toNextMon = () => {
 </template>
 <style>
 h1{
-  color: black;
+  color: #673C4F;
+  justify-self: center;
+  font-weight: bold;
 }
 .week-header{
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  border: 1px solid #673C4F;
+}
+.week-header h2{
+  color: white;
 }
 .week-title{
-  color: #673C4F;
-  background-color: white;
-  font-size: 14px;
-  width: 75px;
+  color: white;
+  background-color: #673C4F;
+  font-size: 15px;
+  width: 100px;
+  border: 1px solid #673C4F;
+  overflow: hidden;
   text-align: center;
 }
 .calendar-days{
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
+  border: 1px solid #673C4F;
 }
 .week-row{
   display: flex;
@@ -151,8 +159,46 @@ h1{
   height: 75px;
 }
 .day-box{
-  width: 75px;
+  width: 100px;
   margin: 0px;
-  border: 1px solid black;
+  border: 1px solid #673C4F;
+  justify-content: center;
+  padding: 2px 5px 5px 2px;
+  color: black;
+  background-color: white;
 }
+.nav-buttons{
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.pn-btn{
+  background-color: #673C4F;
+  border-radius: 20px;
+  border: 0 solid;
+  font-size: 16px;
+  width: 60px;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+
+.today-btn{
+  background-color: #673C4F;
+  border-radius: 20px;
+  border: 0 solid;
+  font-size: 16px;
+  width: 80px;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+.pn-btn:hover{
+  background-color: #8d536d;
+  cursor: pointer;
+}
+
 </style>
