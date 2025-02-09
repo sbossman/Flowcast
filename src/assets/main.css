@@ -28,7 +28,7 @@ nav .nav-link{
   font-size: 17px;
   align-content: center;
   margin: 0;
-  font-family:'Montserrat Alternates', sans-serif;
+  font-family: sans-serif;
 }
 
 nav .nav-link:hover{
@@ -56,7 +56,7 @@ nav .account{
   align-content: center;
   margin: 0;
   border: 0 solid;
-  font-family:'Montserrat Alternates', sans-serif;
+  font-family: sans-serif;
 }
 
 nav .account:hover{
@@ -188,7 +188,7 @@ nav .account:hover{
   font-size: 22px;
   margin-left: 5px;
   margin-right: 5px;
-  font-family:'Montserrat Alternates', sans-serif;
+  font-family: sans-serif;
 }
 
 .home-options  button:hover{
@@ -201,7 +201,7 @@ nav .account:hover{
   font-size: 20px;
   font-style: oblique;
   margin-bottom: 20px;
-  font-family:'Montserrat Alternates', sans-serif;
+  font-family: sans-serif;
 }
 
 .user-home-container{
@@ -284,7 +284,7 @@ nav .account:hover{
 
 .input-section label{
   font-size: 20px;
-  font-family:'Montserrat Alternates', sans-serif;
+  font-family:sans-serif;
 }
 
 .input-section input{
@@ -305,7 +305,7 @@ nav .account:hover{
   padding-right: 10px;
   border-radius: 20px;
   border: 0 solid;
-  font-family:'Montserrat Alternates', sans-serif;
+  font-family: sans-serif;
 }
 
 .button-section button:hover{
@@ -339,7 +339,7 @@ nav .account:hover{
 
 .phase-msg{
   margin: 10px;
-  font-family:'Montserrat Alternates', sans-serif;
+  font-family: sans-serif;
 }
 
 #phase{

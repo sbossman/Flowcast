@@ -19,7 +19,7 @@ const periods = useCollection(collection(db, "users", auth.currentUser.uid, "per
 <template>
   <div class="user-home-container">
 
-    <h2 class = 'kinda-title'>Past Periods</h2>
+    <h1 class = 'kinda-title'>Past Periods</h1>
 
     <Calendar  />
 

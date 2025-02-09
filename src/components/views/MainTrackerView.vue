@@ -40,6 +40,16 @@ const predictPeriod = async(mostRecent) => {
   }
 };
 
+const dateToString = (date) => {
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const splitString = date.split("-");
+  let year = splitString[0]
+  let monthNum = splitString[1]
+  let month = months[Number(monthNum) - 1]
+  let day = splitString[2]
+  return month + " " + day + ", " + year;
+}
+
 const logPeriod = async () => {
   // calculating end date
   const start = new Date(startDate.value);
@@ -126,7 +136,7 @@ onMounted(async () => {
 
     <!-- next period -->
      <div v-if="nextPeriod !== null">
-      <h2 class="phase-msg">Your next period will be <span id="phase"> {{ nextPeriod }}</span></h2>
+      <h2 class="phase-msg">Your next period will be <span id="phase"> {{ dateToString(nextPeriod) }}</span></h2>
      </div>
      <div v-else>
       <h2 class="phase-msg">Ripski bro</h2>
