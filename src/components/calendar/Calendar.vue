@@ -343,7 +343,7 @@ const showModifyPeriod = ref(false);
           <div v-for="day in week"
                :key="day"
                class="day-box"
-               :class="{'diff-mon': !day.sameMon, 'period': periodOnDay(day.date).length > 0, 'predicted-period': periodPredictedOnDay(day.date) == true}"
+               :class="{'diff-mon': !day.sameMon, 'period': periodOnDay(day.date).length > 0}"
                @click="selectDay(day.date)"
           >
             <p>{{ day.day }}</p>
