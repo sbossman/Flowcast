@@ -133,7 +133,7 @@ const getAdvice = async () => {
 }
 
 .submit-button:hover {
-    background-color: #837ee5;;
+    background-color: #8d536d;
 }
 
 /*
