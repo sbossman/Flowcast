@@ -36,7 +36,6 @@ const getDaysArray = (y, m) => {
     mm = 12;
   }
   const numDaysInLastMon = new Date(y, mm, 0);
-  // console.log("LAST MONTH: ", numDaysInLastMon);
   for (let i = 0; i < weekdayOfFDOM; i++) {
     const d = numDaysInLastMon.getDate() - (weekdayOfFDOM - 1 - i) //- weekdayOfFDOM)
     daysArray.push(d);
@@ -52,8 +51,6 @@ const getDaysArray = (y, m) => {
     daysArray.push(i)
   }
 
-  console.log(daysArray);
-
   let weeksArr = [];
   for(let i = 0; i < numWeeksNecessary(y, m); i++){
     let daysArr = [];
@@ -65,11 +62,35 @@ const getDaysArray = (y, m) => {
   return weeksArr;
 }
 
-
 const month = ref(currentMonth);
 const monthNum = ref(currMonNum);
 const year = ref(currentYear);
 const weeksToMake = ref(numWeeksNecessary(currentYear, currMonNum));
+
+const toPrevMon = () => {
+  if (monthNum.value === 0) {
+    monthNum.value = 11;
+    year.value--;
+  } else {
+    monthNum.value--;
+  }
+  month.value = months[monthNum.value]
+}
+
+const toThisMon = () => {
+  month.value = currentMonth;
+  year.value = currentYear
+}
+
+const toNextMon = () => {
+  if (monthNum.value === 11) {
+    monthNum.value = 0;
+    year.value++;
+  } else {
+    monthNum.value++;
+  }
+  month.value = months[monthNum.value]
+}
 
 
 </script>
@@ -94,7 +115,9 @@ const weeksToMake = ref(numWeeksNecessary(currentYear, currMonNum));
         </div>
       </div>
       <div class="nav-buttons">
-        <button></button>
+        <button class="pn-btn" @click="toPrevMon">Previous</button>
+        <button class="today-btn" @click="toThisMon">Today</button>
+        <button class="pn-btn" @click="toNextMon">Next</button>
       </div>
 
     </div>
