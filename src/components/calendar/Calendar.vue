@@ -1,9 +1,9 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import { useCollection } from "vuefire";
-import {doc, getFirestore, collection, addDoc, getDocs} from "firebase/firestore";
+import {doc, getFirestore, collection, updateDoc, getDocs, deleteDoc, addDoc} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { firebaseApp} from "@/firebase.js";
+import {db, firebaseApp} from "@/firebase.js";
 import {calculatePhase} from "@/components/PhaseCalculator.js";
 
 const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -13,26 +13,6 @@ const currentMonth = months[today.getMonth()];
 const currMonNum = today.getMonth();
 
 
-
-// const checkIfPeriod = async (date) => {
-//
-//   const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
-//   if (!querySnapshot.empty) {
-//     const periods = querySnapshot.docs.map(doc => doc.data());
-//     let flag = false;
-//     // console.log(date);
-//     for(let i = 0; i < periods.length; i++){
-//       let s = periods[i].startDate;
-//       let e = periods[i].endDate;
-//       if(s <= date && e >= date){
-//         console.log("TRUE");
-//         flag = true;
-//       }
-//     }
-//     return flag;
-//   }
-//   return false;
-// }
 
 const numWeeksNecessary = (y, m) => {
   const tempDate = new Date(y, (m+1), 0);
@@ -156,36 +136,123 @@ const fetchPeriods = async () => {
   const auth = getAuth();
   const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
   if(!querySnapshot.empty){
-    periods.value = querySnapshot.docs.map(doc => doc.data());
-
+    // periods.value = querySnapshot.docs.map(doc => doc.data());
+    periods.value = querySnapshot.docs.map(doc => {
+      return {
+        id: doc.id,
+        data: doc.data()
+      }
+    });
   }
 }
 
 const periodOnDay = (day) => {
-  // for(let period in periods.value.entries().return()){
-  //   console.log(period)
-  // }
-  // return false;
   return periods.value.filter(event => {
-    // console.log(event.valueOf().startDate);
-    let s = event.valueOf().startDate;
-    let e = event.valueOf().endDate;
+    let s = event.data.valueOf().startDate;
+    let e = event.data.valueOf().endDate;
     let now = formatDate(day);
-    console.log("Start: " + s + "\tNow: " + now + "\tEnd: " + e)
-    console.log("After start: " + (now >= s) + "\tBefore End: " + (now <= e))
     return now >= s && now <= e;
     // const eventDate = new Date(event.date.seconds * 1000); // Firestore stores dates as timestamp (seconds)
     // return eventDate.getDate() === day && eventDate.getMonth() === currentMonth.value && eventDate.getFullYear() === currentYear.value;
   });
 }
 
+const selectedDay = ref(null)
+const selectedPeriod = ref(null)
+const startDate = ref(null)
+const endDate = ref(null)
+const periodId = ref(null)
+const showAddPeriod = ref(null)
+
+const selectDay = (day) => {
+  selectedDay.value = day;
+  let periods = periodOnDay(day);
+  if(periods.length > 0){
+    selectedPeriod.value = periods.at(0);
+    startDate.value = periods.at(0).data.startDate;
+    endDate.value = periods.at(0).data.endDate;
+    showModifyPeriod.value = true;
+    periodId.value = periods.at(0).id;
+  }
+  else{
+    showAddPeriod.value = true;
+  }
+}
+const modifyPeriod = async (docId, data) => {
+  const db = getFirestore(firebaseApp);
+  const auth = getAuth();
+  try {
+    const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
+    const documentRef = doc(db, "users", auth.currentUser.uid, "periods", docId);
+
+    if(del.value){
+      await deleteDoc(documentRef, data)
+    }
+    else{
+      await updateDoc(documentRef, data);
+    }
+  } catch (error) {
+    console.error("Error updating document:", error);
+  }
+};
+
+const del = ref(false);
+const logPeriod = async () => {
+  const start = new Date(startDate.value);
+  const end = new Date(endDate.value);
+
+  await modifyPeriod(periodId.value, {
+    startDate: start.toISOString().split('T')[0],
+    endDate: end.toISOString().split('T')[0],
+  })
+  closeModal()
+  await fetchPeriods()
+}
+
+
+const addPeriod = async () => {
+  const db = getFirestore(firebaseApp);
+  const auth = getAuth();
+  // calculating end date
+  const start = new Date(startDate.value);
+  const end = new Date(endDate.value);
+
+  // adding dates to DB
+  try {
+    await addDoc(collection(db, "users", auth.currentUser.uid, "periods"), {
+      startDate: start.toISOString().split('T')[0],
+      endDate: end.toISOString().split('T')[0],
+    })
+    closeModal();
+    await fetchPeriods()
+  } catch (error) {
+    console.error('Error logging period:', error);
+  }
+};
+
+const closeModal = () => {
+  selectedDay.value = null;
+  selectedPeriod.value = null;
+  startDate.value = null;
+  endDate.value = null;
+  showModifyPeriod.value = false;
+  del.value = false;
+  showAddPeriod.value = false;
+}
+
+const deletePeriod = async (docId) => {
+  del.value = true;
+}
+
 onMounted(() => {
   fetchPeriods();
 });
 
+const showModifyPeriod = ref(false);
+
 </script>
 <template>
-  <div>
+  <div class="calendar">
     <h1>{{ month }} {{ year }}</h1>
     <div>
       <div class="week-header">
@@ -201,7 +268,9 @@ onMounted(() => {
         <div v-for="week in getDaysArray(year, monthNum)" class="week-row">
           <div v-for="day in week"
                class="day-box"
-               :class="{'diff-mon': !day.sameMon, 'period': periodOnDay(day.date).length > 0}">
+               :class="{'diff-mon': !day.sameMon, 'period': periodOnDay(day.date).length > 0}"
+               @click="selectDay(day.date)"
+          >
             <p>{{ day.day }}</p>
 <!--            <p>{{ periodOnDay(day.date)}}</p>-->
           </div>
@@ -214,13 +283,54 @@ onMounted(() => {
       </div>
 
     </div>
+    <div v-if="showModifyPeriod" class="modal">
+      <div class="modal-content">
+        <h2>Modify Period</h2>
+        <form @submit.prevent="logPeriod">
+          <div class="input-section">
+            <label>Start Date: </label>
+            <input type="date" v-model="startDate">
+          </div>
+          <div class="input-section">
+            <label>End Date: </label>
+            <input type="date" v-model="endDate">
+          </div>
+          <div class="button-section">
+            <button id="close-btn" @click="closeModal">Close</button>
+            <button id="delete-btn" @click="deletePeriod(periodId)">Delete</button>
+            <button id="submission-btn" type="submit">Modify</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+    <div v-else-if="showAddPeriod" class="modal">
+      <div class="modal-content">
+        <h2>Add Period</h2>
+        <form @submit.prevent="addPeriod">
+          <div class="input-section">
+            <label>Start Date: </label>
+            <input type="date" v-model="startDate">
+          </div>
+          <div class="input-section">
+            <label>End Date: </label>
+            <input type="date" v-model="endDate">
+          </div>
+          <div class="button-section">
+            <button id="close-btn" @click="closeModal">Close</button>
+            <button id="submission-btn" type="submit">Log</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 <style>
-h1{
+.calendar h1{
   color: #673C4F;
   justify-self: center;
   font-weight: bold;
+  font-size: 24px;
 }
 .week-header{
   display: flex;
@@ -260,11 +370,14 @@ h1{
   color: black;
   background-color: white;
 }
+.day-box:hover{
+  cursor: pointer;
+}
 .day-box.diff-mon p{
   color: #646F76;
 }
 .day-box.period{
-  background-color: #ffb4b8;
+  background-color: #F1555A;
 }
 .nav-buttons{
   margin: 10px;

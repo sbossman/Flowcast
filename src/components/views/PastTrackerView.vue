@@ -19,11 +19,16 @@ const periods = useCollection(collection(db, "users", auth.currentUser.uid, "per
 <template>
   <div class="user-home-container">
 
-    <h2>Past Periods</h2>
+    <h1>Past Periods</h1>
 
     <Calendar  />
 
   </div>
 </template>
 <style scoped>
+.user-home-container h1{
+  font-size:42px;
+  color: black;
+  font-weight: bold;
+}
 </style>

@@ -9,23 +9,23 @@ import { getAuth } from "firebase/auth";
 const auth = getAuth();
 
 const showPeriodInput = ref(false);
-const periodDuration = ref(0);
 const currPhase = ref(null);
 const startDate = ref("startDate");
+const endDate = ref("endDate");
 
 const logPeriod = async () => {
   // calculating end date
   const start = new Date(startDate.value);
-  const end = start;
-  end.setDate(start.getDate() + periodDuration.value);
+  const end = new Date(endDate.value);
 
   // adding dates to DB
   try {
     await addDoc(collection(db, "users", auth.currentUser.uid, "periods"), {
       startDate: start.toISOString().split('T')[0],
       endDate: end.toISOString().split('T')[0],
-    });
-    console.log('Period logged with start date:', start);
+    })
+    console.log('Period logged with start date:', start.toISOString().split('T')[0]);
+    console.log('Period logged with end date:', end.toISOString().split('T')[0]);
     closeModal();
     // calculating current phase
     currPhase.value = await calculatePhase(start, end)
@@ -37,7 +37,6 @@ const logPeriod = async () => {
 
 const closeModal = () => {
   showPeriodInput.value = false;
-  periodDuration.value = 0;
 };
 
 // keeps currPhase updated. idk if there's an easier way to fetch most recent period
@@ -76,8 +75,8 @@ onMounted(async () => {
             <input type="date" v-model="startDate">
           </div>
           <div class="input-section">
-            <label>Expected Duration (days):</label>
-            <input v-model.number="periodDuration" type="number" required />
+            <label>End Date: </label>
+            <input type="date" v-model="endDate">
           </div>
           <div class="button-section">
             <button id="close-btn" @click="closeModal">Close</button>

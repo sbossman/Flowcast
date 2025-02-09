@@ -250,6 +250,7 @@ nav .account:hover{
 
 .modal-content {
   background: white;
+  min-width: 250px;
   padding: 20px;
   border-radius: 5px;
 }
@@ -288,34 +289,42 @@ nav .account:hover{
   justify-content: space-between;
 }
 
-.button-section #submission-btn{
-  background-color: #673C4F;
-  color: white;
-  font-size: 20px;
+.button-section button{
+  font-size: 14px;
   padding: 5px;
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 20px;
   border: 0 solid;
 }
+
+.button-section button:hover{
+  cursor:pointer;
+}
+
+.button-section #submission-btn{
+  background-color: #673C4F;
+  color: white;
+}
 .button-section #submission-btn:hover{
   background-color: #8d536d;
-  cursor: pointer;
+}
+
+.button-section #delete-btn{
+  background-color: #F1555A;;
+  color:white;
+}
+.button-section #delete-btn:hover{
+  background-color: #F47B7F;
+  color:white;
 }
 
 .button-section #close-btn{
   background-color: #bbbbbb;
   color: white;
-  font-size: 20px;
-  padding: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 20px;
-  border: 0 solid;
 }
 .button-section #close-btn:hover{
   background-color: #dddddd;
-  cursor: pointer;
 }
 
 .phase-msg{
