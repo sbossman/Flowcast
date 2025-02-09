@@ -5,6 +5,7 @@ import { doc, getFirestore, collection, addDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useFirestore } from 'vuefire'
 import { firebaseApp } from "@/firebase.js";
+import  Calendar from "@/components/calendar/Calendar.vue";
 
 // const db = useFirestore()
 const db = getFirestore(firebaseApp)
@@ -12,6 +13,8 @@ const db = getFirestore(firebaseApp)
 const startDate = ref("startDate")
 const endDate = ref("startDate")
 const auth = getAuth();
+
+
 
 
 const periods = useCollection(collection(db, "users", auth.currentUser.uid, "periods"))
@@ -27,5 +30,10 @@ const periods = useCollection(collection(db, "users", auth.currentUser.uid, "per
         {{ period.startDate }} - {{ period.endDate }}
       </li>
     </ul>
+
+    <Calendar  />
+
   </div>
 </template>
+<style scoped>
+</style>

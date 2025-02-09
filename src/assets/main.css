@@ -209,7 +209,9 @@ nav .account:hover{
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
 }
+
 
 .log-period{
   padding: 10px;
