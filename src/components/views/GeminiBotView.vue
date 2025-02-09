@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { db } from '../../firebase.js';
+import { marked } from 'marked';
 import { collection, getDocs } from "firebase/firestore";
 import { adviceGenerator } from '../geminiAI';
 import { calculatePhase } from '../PhaseCalculator';
@@ -38,7 +39,8 @@ const getAdvice = async () => {
         if (userFeeling.value && currPhase.value != null) {
             console.log(userFeeling.value, currPhase.value);
             const str1 = `How does feeling ${userFeeling.value} relate to being in your ${currPhase.value}, and what are natural things I can do to help?`;
-            advice.value = await adviceGenerator(str1);
+            let raw = await adviceGenerator(str1);
+            advice.value = marked.parse(raw);
         }
     } catch (error) {
         console.error('get advice function', error);
@@ -57,12 +59,12 @@ const getAdvice = async () => {
         placeholder="Enter how you're feeling" 
         class="feeling-input"
         />
-        <button @click="getAdvice" class="submit-button">Submit</button>
+        <button @click="getAdvice" class="submit-button">Ask</button>
 
         <!-- Advice Display -->
-        <div v-if="advice !==''" class="advice-response">
+        <div v-if="advice !==''" class="advice">
         <h2>Advice:</h2>
-        <p>{{ advice }}</p>
+        <div class="advice-response" v-html="advice"></div>
         </div>
     </div>
 </template>
@@ -81,7 +83,7 @@ const getAdvice = async () => {
 .question-title {
   font-size: 24px;
   color: black;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   font-style: italic;
   text-align: center;
   font-family:'Montserrat Alternates', sans-serif;
@@ -130,28 +132,28 @@ const getAdvice = async () => {
   background-color: #837ee5;;
 }
 
+.advice {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .advice-response {
   background-color: #faefff;
-  padding: 20px;
+  padding: 15px;
   border-radius: 10px;
-  margin-top: 30px;
+  margin-top: 15px;
   width: 70%;
   max-height: 350px;
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  line-height: 1.6;
 }
-
-
-.advice-response h2 {
-  font-size: 1.5rem;
-  color: #333;
-}
-
 
 .advice-response p {
   font-size: 14adpx;
   color: #555555;
-  line-height: 1.5;
 }
 
 </style>
