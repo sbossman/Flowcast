@@ -157,6 +157,62 @@ const periodOnDay = (day) => {
   });
 }
 
+<<<<<<< Updated upstream
+=======
+const getPeriodPrediction = async () => {
+    try {
+      periods.value.sort((a, b) =>
+        b.valueOf().data.startDate - a.valueOf().data.startDate
+      )
+      const mostRecent = periods.value.at(0).valueOf().data.startDate;
+
+      console.log("R: " + mostRecent)
+      const avgCycle = await calculateAvgCycle();
+      if (typeof avgCycle !== 'number' || isNaN(avgCycle)) {
+        console.error('invalid avg:', avgCycle);
+        return false;
+      }
+
+      let totalDuration = 0;
+      let totalPeriods = 0;
+      for(let i = 0; i < periods.value.length; i++){
+        let s = new Date(periods.value.at(i).valueOf().data.startDate);
+        let e = new Date(periods.value.at(i).valueOf().data.endDate);
+        const diffInTime = e - s;
+        const diffInDays = diffInTime / (24*60*60*1000);
+        totalDuration = totalDuration + diffInDays;
+        totalPeriods++;
+      }
+      let avgDuration;
+      if(totalPeriods > 0){
+        avgDuration = Math.floor(totalDuration/totalPeriods);
+      }
+      else{
+        avgDuration = 0;
+      }
+      //mostRecent as a date
+      const mostRecentDate = new Date(mostRecent);
+      if (isNaN(mostRecentDate.getTime())) {
+        console.error('invalid recent date:', mostRecent);
+        return false;
+      }
+      const predictedStartDate = new Date(mostRecentDate);
+      const predictedEndDate = new Date(mostRecentDate);
+      predictedStartDate.setDate(mostRecentDate.getDate() + avgCycle);
+      predictedEndDate.setDate(mostRecentDate.getDate() + avgCycle + avgDuration);
+
+      predictedPeriodStart.value = predictedStartDate.toISOString().split('T')[0];
+      predictedPeriodEnd.value = predictedEndDate.toISOString().split('T')[0];
+    } catch (error) {
+      console.error('error w predicting period:', error);
+    }
+}
+
+const periodPredictedOnDay = (day) => {
+  return formatDate(day) >= predictedPeriodStart.value && formatDate(day) <= predictedPeriodEnd.value
+}
+
+>>>>>>> Stashed changes
 const selectedDay = ref(null)
 const selectedPeriod = ref(null)
 const startDate = ref(null)
