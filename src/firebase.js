@@ -1,4 +1,4 @@
-import configData from '../config.json'
+import configData from './config.json'
 
 // I DON'T KNOW WHERE THIS SHOULD BEEEEEEEEEEEEEEEEE
 // Import the functions you need from the SDKs you need

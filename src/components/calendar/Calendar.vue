@@ -1,9 +1,9 @@
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import { useCollection } from "vuefire";
 import {doc, getFirestore, collection, addDoc, getDocs} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import {db, firebaseApp} from "@/firebase.js";
+import { firebaseApp} from "@/firebase.js";
 import {calculatePhase} from "@/components/PhaseCalculator.js";
 
 const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -12,26 +12,27 @@ const currentYear = today.getFullYear();
 const currentMonth = months[today.getMonth()];
 const currMonNum = today.getMonth();
 
-const checkIfPeriod = async (date) => {
-  const db = getFirestore(firebaseApp);
-  const auth = getAuth();
-  const periods = useCollection(collection(db, "users", auth.currentUser.uid, "periods"))
 
-  const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
-  if (!querySnapshot.empty) {
-    const periods = querySnapshot.docs.map(doc => doc.data());
-    let flag = false;
-    console.log(date);
-    for(let i = 0; i < periods.length; i++){
-      let s = periods[i].startDate;
-      let e = periods[i].endDate;
-      if(s <= date && e >= date){
-        flag = true;
-      }
-    }
-    return flag;
-  }
-}
+
+// const checkIfPeriod = async (date) => {
+//
+//   const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
+//   if (!querySnapshot.empty) {
+//     const periods = querySnapshot.docs.map(doc => doc.data());
+//     let flag = false;
+//     // console.log(date);
+//     for(let i = 0; i < periods.length; i++){
+//       let s = periods[i].startDate;
+//       let e = periods[i].endDate;
+//       if(s <= date && e >= date){
+//         console.log("TRUE");
+//         flag = true;
+//       }
+//     }
+//     return flag;
+//   }
+//   return false;
+// }
 
 const numWeeksNecessary = (y, m) => {
   const tempDate = new Date(y, (m+1), 0);
@@ -79,13 +80,32 @@ const getDaysArray = (y, m) => {
     let daysArr = [];
     for(let j = 0; j < 7; j++){
       const d = daysArray[(i*7) + j];
-      const dayDate = new Date(y, m, d);
-      const sameMon = !((d > 25 && i < 1) || (d < 8 && i > 3));
+      let mon = m;
+      let yr = y;
+      if(d > 20 && i < 1){
+        if (mon === 0) {
+          mon = 11;
+          yr--;
+        } else {
+          mon--;
+        }
+      }
+      else if(d < 8 && i > 3){
+        if (mon === 11) {
+          mon = 0;
+          yr++;
+        } else {
+          mon++;
+        }
+
+      }
+      const dayDate = new Date(yr, mon, d);
+      const sameMon = !((d > 20 && i < 1) || (d < 8 && i > 3));
       daysArr.push({
         date: dayDate,
         day: d,
         sameMon: sameMon,
-        period: checkIfPeriod(dayDate)
+        isPeriod: false
       })
     }
     weeksArr.push(daysArr);
@@ -98,6 +118,12 @@ const monthNum = ref(currMonNum);
 const year = ref(currentYear);
 const weeksToMake = ref(numWeeksNecessary(currentYear, currMonNum));
 
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 const toPrevMon = () => {
   if (monthNum.value === 0) {
     monthNum.value = 11;
@@ -123,7 +149,39 @@ const toNextMon = () => {
   month.value = months[monthNum.value]
 }
 
+const periods = ref([])
 
+const fetchPeriods = async () => {
+  const db = getFirestore(firebaseApp);
+  const auth = getAuth();
+  const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
+  if(!querySnapshot.empty){
+    periods.value = querySnapshot.docs.map(doc => doc.data());
+
+  }
+}
+
+const periodOnDay = (day) => {
+  // for(let period in periods.value.entries().return()){
+  //   console.log(period)
+  // }
+  // return false;
+  return periods.value.filter(event => {
+    // console.log(event.valueOf().startDate);
+    let s = event.valueOf().startDate;
+    let e = event.valueOf().endDate;
+    let now = formatDate(day);
+    console.log("Start: " + s + "\tNow: " + now + "\tEnd: " + e)
+    console.log("After start: " + (now >= s) + "\tBefore End: " + (now <= e))
+    return now >= s && now <= e;
+    // const eventDate = new Date(event.date.seconds * 1000); // Firestore stores dates as timestamp (seconds)
+    // return eventDate.getDate() === day && eventDate.getMonth() === currentMonth.value && eventDate.getFullYear() === currentYear.value;
+  });
+}
+
+onMounted(() => {
+  fetchPeriods();
+});
 
 </script>
 <template>
@@ -143,8 +201,9 @@ const toNextMon = () => {
         <div v-for="week in getDaysArray(year, monthNum)" class="week-row">
           <div v-for="day in week"
                class="day-box"
-               :class="{'diff-mon': !day.sameMon, 'period': day.period}">
+               :class="{'diff-mon': !day.sameMon, 'period': periodOnDay(day.date).length > 0}">
             <p>{{ day.day }}</p>
+<!--            <p>{{ periodOnDay(day.date)}}</p>-->
           </div>
         </div>
       </div>
