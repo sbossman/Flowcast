@@ -20,11 +20,6 @@ const periods = useCollection(collection(db, "users", auth.currentUser.uid, "per
   <div class="user-home-container">
 
     <h2>Past Periods</h2>
-    <ul>
-      <li v-for="period in periods" :key="period.id">
-        {{ period.startDate }} - {{ period.endDate }}
-      </li>
-    </ul>
 
     <Calendar  />
 

@@ -15,9 +15,8 @@ const startDate = ref("startDate");
 
 const logPeriod = async () => {
   // calculating end date
-  // NOTE: ASSUMING TODAY IS 1st DAY OF PERIOD
   const start = new Date(startDate.value);
-  const end = new Date();
+  const end = start;
   end.setDate(start.getDate() + periodDuration.value);
 
   // adding dates to DB
