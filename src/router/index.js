@@ -26,7 +26,14 @@ const router = createRouter({
             meta: {
                 requiresAuth: true,
             },
-        }
+        },
+        {
+            path: "/advice",
+            component: () => import("../components/views/GeminiBotView.vue"),
+            meta: {
+                requiresAuth: true,
+            },
+        },
     ]
 });
 

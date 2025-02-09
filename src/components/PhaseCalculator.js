@@ -1,4 +1,4 @@
-import { calculateAvgCycle } from "./cycleCalculator";
+import { calculateAvgCycle } from "./cycleCalculator.js";
 
 export const calculatePhase = async (startDate, endDate) => {
     const avgLength = await calculateAvgCycle();
