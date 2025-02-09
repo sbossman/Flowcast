@@ -1,4 +1,5 @@
 @import './base.css';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body{
   overflow-block: hidden;
@@ -27,6 +28,7 @@ nav .nav-link{
   font-size: 17px;
   align-content: center;
   margin: 0;
+  font-family:'Montserrat Alternates', sans-serif;
 }
 
 nav .nav-link:hover{
@@ -54,6 +56,7 @@ nav .account{
   align-content: center;
   margin: 0;
   border: 0 solid;
+  font-family:'Montserrat Alternates', sans-serif;
 }
 
 nav .account:hover{
@@ -65,6 +68,8 @@ nav .account:hover{
   text-align: center;
   font-size: 64px;
   font-weight: bold;
+  font-family:'Montserrat Alternates', sans-serif;
+  letter-spacing: 5px;
 }
 
 .login-container{
@@ -183,6 +188,7 @@ nav .account:hover{
   font-size: 22px;
   margin-left: 5px;
   margin-right: 5px;
+  font-family:'Montserrat Alternates', sans-serif;
 }
 
 .home-options  button:hover{
@@ -195,6 +201,7 @@ nav .account:hover{
   font-size: 20px;
   font-style: oblique;
   margin-bottom: 20px;
+  font-family:'Montserrat Alternates', sans-serif;
 }
 
 .user-home-container{
@@ -222,6 +229,7 @@ nav .account:hover{
   font-size: 22px;
   margin-left: 5px;
   margin-right: 5px;
+  font-family:'Montserrat Alternates', sans-serif;
 }
 
 .log-period:hover{
@@ -260,7 +268,7 @@ nav .account:hover{
   justify-self: center;
   font-weight: bold;
   font-size: 28px;
-
+  font-family:'Montserrat Alternates', sans-serif;
 }
 
 .modal-content label{
@@ -276,6 +284,7 @@ nav .account:hover{
 
 .input-section label{
   font-size: 20px;
+  font-family:'Montserrat Alternates', sans-serif;
 }
 
 .input-section input{
@@ -296,6 +305,7 @@ nav .account:hover{
   padding-right: 10px;
   border-radius: 20px;
   border: 0 solid;
+  font-family:'Montserrat Alternates', sans-serif;
 }
 
 .button-section button:hover{
@@ -329,6 +339,7 @@ nav .account:hover{
 
 .phase-msg{
   margin: 10px;
+  font-family:'Montserrat Alternates', sans-serif;
 }
 
 #phase{
