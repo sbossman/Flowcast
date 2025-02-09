@@ -19,11 +19,15 @@ const periods = useCollection(collection(db, "users", auth.currentUser.uid, "per
 <template>
   <div class="user-home-container">
 
-    <h2>Past Periods</h2>
+    <h2 class = 'kinda_title'>Past Periods</h2>
 
     <Calendar  />
 
   </div>
 </template>
+
 <style scoped>
+.kinda_title{
+  font-family:'Montserrat Alternates', sans-serif;
+}
 </style>

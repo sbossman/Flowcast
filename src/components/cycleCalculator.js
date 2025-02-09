@@ -20,12 +20,16 @@ export const calculateAvgCycle = async () => {
   
       if (cycleLengths.length > 0) {
         const sum = cycleLengths.reduce((acc, length) => acc + length, 0);
-        return (sum / cycleLengths.length).toFixed(2);
+        const avgCycle = sum / cycleLengths.length;
+        console.log('Average cycle length:', avgCycle);
+        return parseFloat(avgCycle.toFixed(2));
       } else {
-        return null;
+        console.log('idk my dude');
+        return 0;
       }
     } catch (error) {
-      console.error('Error calculating average cycle length:', error);
+      console.error('error calculating avg cycle length:', error);
+      return 0;
     }
   };
   

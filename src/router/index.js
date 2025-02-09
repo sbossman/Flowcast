@@ -14,7 +14,7 @@ const router = createRouter({
             path: "/signup",
             component: () => import("../components/views/SignUpView.vue") },
         {
-            path: "/tracker",
+            path: "/periodtracker",
             component: () => import("../components/views/MainTrackerView.vue"),
             meta: {
                 requiresAuth: true,

@@ -31,7 +31,7 @@ const handleSignOut = () => {
 <template>
   <nav>
     <router-link to="/"><p class="nav-link">Home</p></router-link>
-    <router-link to="/tracker"><p class="nav-link">Tracker</p></router-link>
+    <router-link to="/periodtracker"><p class="nav-link">Period Tracker</p></router-link>
     <router-link to="/pasttracker"><p class="nav-link">Past Tracker</p></router-link>
     <router-link to="/advice"><p class="nav-link">Advice</p></router-link>
     <router-link to="/login"><p class="account" v-if="!isLoggedIn">Log In</p></router-link>
