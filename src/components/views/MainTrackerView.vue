@@ -29,7 +29,7 @@ const logPeriod = async () => {
     closeModal();
     // calculating current phase
     currPhase.value = await calculatePhase(start, end)
-
+    console.log(currPhase.value);
   } catch (error) {
     console.error('Error logging period:', error);
   }
@@ -44,11 +44,18 @@ const closeModal = () => {
 onMounted(async () => {
   const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
   if (!querySnapshot.empty) {
-    console.log(querySnapshot);
     const periods = querySnapshot.docs.map(doc => doc.data());
     periods.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
     const recentPeriod = periods[0];
-    currPhase.value = await calculatePhase(recentPeriod.startDate, recentPeriod.endDate);
+
+    // past period, use that one
+    const currentDate = new Date();
+    if (new Date(recentPeriod.endDate) < currentDate) {
+      currPhase.value = await calculatePhase(recentPeriod.startDate, recentPeriod.endDate);
+    } else {
+      // latest period is ongoing
+      currPhase.value = await calculatePhase(recentPeriod.startDate, currentDate);
+    }
   }
 });
 

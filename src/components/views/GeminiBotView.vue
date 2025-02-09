@@ -1,5 +1,5 @@
 <script setup>
-import readline from 'readline';
+import { ref } from 'vue';
 import { db } from '../../firebase.js';
 import { collection, getDocs } from "firebase/firestore";
 import { adviceGenerator } from '../geminiAI';
@@ -15,6 +15,10 @@ const currPhase = ref(null);
 // currPhase
 const getCurrentPhase = async () => {
   try {
+    if (!auth.currentUser) {
+        console.error("Not logged in.");
+        return;
+    }
     const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
     if (!querySnapshot.empty) {
         const periods = querySnapshot.docs.map(doc => doc.data());
@@ -30,9 +34,10 @@ const getCurrentPhase = async () => {
 // get advice based on input
 const getAdvice = async () => {
     try {
-        getCurrentPhase();
+        await getCurrentPhase();
         if (userFeeling.value && currPhase.value != null) {
-            const str1 = `How does feeling ${userFeeling.value} relate to being in your ${currPhase.value}?`;
+            console.log(userFeeling.value, currPhase.value);
+            const str1 = `How does feeling ${userFeeling.value} relate to being in your ${currPhase.value}, and what are natural things I can do to help?`;
             advice.value = await adviceGenerator(str1);
         }
     } catch (error) {
@@ -53,45 +58,9 @@ const getAdvice = async () => {
         class="feeling-input"
         />
         <button @click="getAdvice" class="submit-button">Ask</button>
-        <div v-if="advice" class="advice-response">
+        <div v-if="advice !==''" class="advice-response">
         <h2>Advice:</h2>
         <p>{{ advice }}</p>
         </div>
     </div>
 </template>
-
-<!--
-<style scoped>
-.chatbot-container {
-  padding: 20px;
-  max-width: 600px;
-  margin: auto;
-  text-align: center;
-}
-
-.feeling-input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.submit-button {
-  padding: 10px 20px;
-  border: none;
-  background-color: #007BFF;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.submit-button:hover {
-  background-color: #0056b3;
-}
-
-.advice-response {
-  margin-top: 20px;
-}
-</style>
--->
