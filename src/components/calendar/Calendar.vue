@@ -1,6 +1,10 @@
 <script setup>
 import {ref} from "vue";
-import CalendarWeeks from "@/components/calendar/CalendarWeeks.vue";
+import { useCollection } from "vuefire";
+import {doc, getFirestore, collection, addDoc, getDocs} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import {db, firebaseApp} from "@/firebase.js";
+import {calculatePhase} from "@/components/PhaseCalculator.js";
 
 const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const today = new Date();
@@ -8,7 +12,26 @@ const currentYear = today.getFullYear();
 const currentMonth = months[today.getMonth()];
 const currMonNum = today.getMonth();
 
+const checkIfPeriod = async (date) => {
+  const db = getFirestore(firebaseApp);
+  const auth = getAuth();
+  const periods = useCollection(collection(db, "users", auth.currentUser.uid, "periods"))
 
+  const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
+  if (!querySnapshot.empty) {
+    const periods = querySnapshot.docs.map(doc => doc.data());
+    let flag = false;
+    console.log(date);
+    for(let i = 0; i < periods.length; i++){
+      let s = periods[i].startDate;
+      let e = periods[i].endDate;
+      if(s <= date && e >= date){
+        flag = true;
+      }
+    }
+    return flag;
+  }
+}
 
 const numWeeksNecessary = (y, m) => {
   const tempDate = new Date(y, (m+1), 0);
@@ -55,7 +78,15 @@ const getDaysArray = (y, m) => {
   for(let i = 0; i < numWeeksNecessary(y, m); i++){
     let daysArr = [];
     for(let j = 0; j < 7; j++){
-      daysArr.push(daysArray[(i*7) + j])
+      const d = daysArray[(i*7) + j];
+      const dayDate = new Date(y, m, d);
+      const sameMon = !((d > 25 && i < 1) || (d < 8 && i > 3));
+      daysArr.push({
+        date: dayDate,
+        day: d,
+        sameMon: sameMon,
+        period: checkIfPeriod(dayDate)
+      })
     }
     weeksArr.push(daysArr);
   }
@@ -93,6 +124,7 @@ const toNextMon = () => {
 }
 
 
+
 </script>
 <template>
   <div>
@@ -109,8 +141,10 @@ const toNextMon = () => {
       </div>
       <div class="calendar-days">
         <div v-for="week in getDaysArray(year, monthNum)" class="week-row">
-          <div v-for="day in week" class="day-box">
-            <p>{{ day }}</p>
+          <div v-for="day in week"
+               class="day-box"
+               :class="{'diff-mon': !day.sameMon, 'period': day.period}">
+            <p>{{ day.day }}</p>
           </div>
         </div>
       </div>
@@ -166,6 +200,12 @@ h1{
   padding: 2px 5px 5px 2px;
   color: black;
   background-color: white;
+}
+.day-box.diff-mon p{
+  color: #646F76;
+}
+.day-box.period{
+  background-color: #ffb4b8;
 }
 .nav-buttons{
   margin: 10px;

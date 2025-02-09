@@ -10,12 +10,7 @@ import  Calendar from "@/components/calendar/Calendar.vue";
 // const db = useFirestore()
 const db = getFirestore(firebaseApp)
 
-const startDate = ref("startDate")
-const endDate = ref("startDate")
 const auth = getAuth();
-
-
-
 
 const periods = useCollection(collection(db, "users", auth.currentUser.uid, "periods"))
 

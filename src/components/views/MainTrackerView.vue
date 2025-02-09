@@ -44,7 +44,6 @@ const closeModal = () => {
 // keeps currPhase updated. idk if there's an easier way to fetch most recent period
 onMounted(async () => {
   const querySnapshot = await getDocs(collection(db, "users", auth.currentUser.uid, "periods"));
-  console.log("HELLO");
   if (!querySnapshot.empty) {
     console.log(querySnapshot);
     const periods = querySnapshot.docs.map(doc => doc.data());
