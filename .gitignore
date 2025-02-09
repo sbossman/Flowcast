@@ -31,6 +31,3 @@ coverage
 
 # Config
 config.json
-
-# Ignore .env
-.env

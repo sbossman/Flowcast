@@ -1,13 +1,12 @@
-import 'dotenv/config';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // making the question
 export const adviceGenerator = async(prompt) => {
-  const genAI = new GoogleGenerativeAI(process.env.VITE_GEMINI_KEY);
+  const genAI = new GoogleGenerativeAI("AIzaSyBbOaDf9REAzoIzpDQw_l8XRSJ4Bp6aM0s");
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
   
   try{
-    result = await model.generateContent({
+    const result = await model.generateContent({
       contents: [
           {
             role: 'user',
@@ -19,11 +18,12 @@ export const adviceGenerator = async(prompt) => {
           }
       ],
       generationConfig: {
-        maxOutputTokens: 150,
-        temperature: 0.1,
+        maxOutputTokens: 600,
+        temperature: 0.3,
       }
     });
-    return result.response.text();
+    const text = result.response.text();
+    return text;
   }
   catch (error) {
     console.error('Error with gemini stuff', error);
